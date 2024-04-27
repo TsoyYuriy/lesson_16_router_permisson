@@ -1,0 +1,14 @@
+
+.header {
+  padding: 20px 0;
+  flex-grow: 1;
+}
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.active {
+  color: chocolate;
+}
