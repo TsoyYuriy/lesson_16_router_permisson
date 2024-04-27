@@ -16,6 +16,8 @@ function App() {
     setUser({
       id: 1,
       name: "Dias",
+      permmision: ["analycs"],
+      role: ["user"],
     });
   };
 
@@ -27,14 +29,6 @@ function App() {
     <div className="App">
       <div className="header-wrap">
         <Header />
-        {/* {
-          user 
-          ? 
-          <button onClick={signOut}>Sign Out</button> 
-          : 
-          <button onClick={signIn}>Sign In</button>
-        } */}
-
         <button onClick={user ? signOut : signIn}>
           {user ? "Sign Out" : "Sign In"}
         </button>
@@ -44,26 +38,34 @@ function App() {
         <Route index element={<Landing />} />
         <Route path="/" element={<Landing />} />
 
+        <Route element={<ProtectedRoute isAllowed={!!user} />}>
+          <Route path="/home" element={<Home />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
+
         <Route
-          path="/home"
+          path="/analytics"
           element={
-            <ProtectedRoute user={user}>
-              <Home />
+            <ProtectedRoute
+              redirectPath="/home"
+              isAllowed={!!user && user.permmision.includes("analycs")}
+            >
+              <Analytics />
             </ProtectedRoute>
           }
         />
 
         <Route
-          path="/dashboard"
+          path="/admin-panel"
           element={
-            <ProtectedRoute user={user}>
-              <Dashboard />
+            <ProtectedRoute
+              redirectPath="/home"
+              isAllowed={!!user && user.role.includes("admin")}
+            >
+              <AdminPanel />
             </ProtectedRoute>
           }
         />
-
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="/admin-panel" element={<AdminPanel />} />
       </Routes>
     </div>
   );
